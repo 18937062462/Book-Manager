@@ -29,6 +29,8 @@ public class EasyuiAction {
 	@RequestMapping("/index")
 	public String index() {
 		System.out.println("00000000");
+		System.out.println("SSSSSSSS");
+
 		return "004_main";
 	}
 
