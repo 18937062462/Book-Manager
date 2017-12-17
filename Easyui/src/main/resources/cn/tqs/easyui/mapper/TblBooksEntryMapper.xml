@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.tqs.easyui.dao.TblBooksEntryMapper" >
+  <resultMap id="BaseResultMap" type="cn.tqs.easyui.entry.TblBooksEntry" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="isbn" property="isbn" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="editionNumber" property="editionnumber" jdbcType="INTEGER" />
+    <result column="copyright" property="copyright" jdbcType="VARCHAR" />
+    <result column="publisherID" property="publisherid" jdbcType="INTEGER" />
+    <result column="imageFile" property="imagefile" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+  	id, isbn, title, editionNumber, copyright, publisherID, imageFile, price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_books
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="int" >
+    delete from tbl_books
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.tqs.easyui.entry.TblBooksEntry" >
+    insert into tbl_books (isbn, title, editionNumber, 
+      copyright, publisherID, imageFile, 
+      price)
+    values (#{isbn,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{editionnumber,jdbcType=INTEGER}, 
+      #{copyright,jdbcType=VARCHAR}, #{publisherid,jdbcType=INTEGER}, #{imagefile,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.tqs.easyui.entry.TblBooksEntry" >
+    insert into tbl_books
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="isbn != null" >
+        isbn,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="editionnumber != null" >
+        editionNumber,
+      </if>
+      <if test="copyright != null" >
+        copyright,
+      </if>
+      <if test="publisherid != null" >
+        publisherID,
+      </if>
+      <if test="imagefile != null" >
+        imageFile,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="isbn != null" >
+        #{isbn,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="editionnumber != null" >
+        #{editionnumber,jdbcType=INTEGER},
+      </if>
+      <if test="copyright != null" >
+        #{copyright,jdbcType=VARCHAR},
+      </if>
+      <if test="publisherid != null" >
+        #{publisherid,jdbcType=INTEGER},
+      </if>
+      <if test="imagefile != null" >
+        #{imagefile,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tqs.easyui.entry.TblBooksEntry" >
+    update tbl_books
+    <set >
+      <if test="isbn != null" >
+        isbn = #{isbn,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="editionnumber != null" >
+        editionNumber = #{editionnumber,jdbcType=INTEGER},
+      </if>
+      <if test="copyright != null" >
+        copyright = #{copyright,jdbcType=VARCHAR},
+      </if>
+      <if test="publisherid != null" >
+        publisherID = #{publisherid,jdbcType=INTEGER},
+      </if>
+      <if test="imagefile != null" >
+        imageFile = #{imagefile,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.tqs.easyui.entry.TblBooksEntry" >
+    update tbl_books
+    set title = #{title,jdbcType=VARCHAR},
+      editionNumber = #{editionnumber,jdbcType=INTEGER},
+      copyright = #{copyright,jdbcType=VARCHAR},
+      publisherID = #{publisherid,jdbcType=INTEGER},
+      imageFile = #{imagefile,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE}
+    where isbn = #{isbn,jdbcType=VARCHAR}
+  </update>
+  <select id="queryAll" resultType="cn.tqs.easyui.entry.TblBooksEntry">
+  		select * from tbl_books
+  </select>
+  
+  <select id="query" parameterType="cn.tqs.easyui.bo.ConditionBo" 
+  					 resultType="cn.tqs.easyui.entry.TblBooksEntry">
+  		select (
+	  		select count(1) from tbl_books 
+	  		<where>
+	  			<if test="title != null and title != ''">
+	  				and title like concat('%', #{title}, '%')
+	  			</if>
+	  			<if test="isbn != null and isbn != ''">
+	  				and isbn  like concat('%', #{isbn}, '%')
+	  			</if>
+	  		</where>) total, a.* 
+	  	from tbl_books a
+  		<where>
+  			<if test="title != null and title != ''">
+  				and title like concat('%', #{title}, '%')
+  			</if>
+  			<if test="isbn != null and isbn != ''">
+  				and isbn  like concat('%', #{isbn}, '%')
+  			</if>
+  		</where>
+  		LIMIT #{offset},#{rows}
+  </select>
+</mapper>
